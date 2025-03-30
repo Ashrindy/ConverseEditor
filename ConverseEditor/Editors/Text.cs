@@ -106,7 +106,7 @@ static class TextEditors
         var y = ImGui.GetWindowSize();
 
         string decodedText = TextCompute.DecodeText(value.Text);
-        if (changed |= ImGui.InputTextMultiline("##text", ref decodedText, int.MaxValue / 4, new Vector2(0, rowHeight)))
+        if (changed |= ImGui.InputTextMultiline($"##text{id}", ref decodedText, int.MaxValue / 4, new Vector2(0, rowHeight)))
             value.Text = TextCompute.EncodeString(decodedText);
 
         if (ImGui.Button("Edit Characters"))
