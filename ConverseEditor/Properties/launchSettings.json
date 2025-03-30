@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ConverseEditor": {
-      "commandName": "Project",
-      "commandLineArgs": "E:\\Steam\\steamapps\\common\\SonicFrontiers\\image\\x64\\raw\\text\\text_common_en\\ui_Toast.cnvrs-text"
-    }
-  }
-}
