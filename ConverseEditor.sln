@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConverseEditor", "ConverseEditor\ConverseEditor.csproj", "{870EF9CC-B20B-4DE7-85F8-B94BA4AB640D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AshDumpLib", "AshDumpLib\AshDumpLib\AshDumpLib.csproj", "{3086FA94-5CBB-DE9C-6BB8-830E28653E48}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{870EF9CC-B20B-4DE7-85F8-B94BA4AB640D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870EF9CC-B20B-4DE7-85F8-B94BA4AB640D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870EF9CC-B20B-4DE7-85F8-B94BA4AB640D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870EF9CC-B20B-4DE7-85F8-B94BA4AB640D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3086FA94-5CBB-DE9C-6BB8-830E28653E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3086FA94-5CBB-DE9C-6BB8-830E28653E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3086FA94-5CBB-DE9C-6BB8-830E28653E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3086FA94-5CBB-DE9C-6BB8-830E28653E48}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82762E4F-C3EA-4950-9960-8B77A97AFDD7}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <UserSecretsId>2e7a4215-26d2-4712-a743-294436990b4e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hexa.NET.ImGui" Version="2.2.6" />
+    <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.14" />
+    <PackageReference Include="Hexa.NET.ImGui.Backends.GLFW" Version="1.0.14" />
+    <PackageReference Include="Hexa.NET.ImGui.Widgets" Version="1.2.11" />
+    <PackageReference Include="OpenTK" Version="4.9.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AshDumpLib\AshDumpLib\AshDumpLib.csproj" />
+  </ItemGroup>
+
+</Project>
