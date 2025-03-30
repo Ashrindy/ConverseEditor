@@ -1,20 +1,20 @@
 # `Converse Editor (C# Editor)`
 
-##_C# editor for HE2 (.cnvrs-text, .cnvrs-meta, .cnvrs-proj)_##
+**_C# editor for HE2 (.cnvrs-text, .cnvrs-meta, .cnvrs-proj)_**
 
 ## 📜 Description 📜
 
-An editor powered by [AshDumpLib](<[https://github.com/Ashrindy/AshDumpLib](https://github.com/Ashrindy/AshDumpLib)>), [Hexa.NET.ImGui](<[https://github.com/HexaEngine/Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)>) ([imgui](<[https://github.com/ocornut/imgui](https://github.com/ocornut/imgui)>)) and [OpenTK](<[https://opentk.net/](https://opentk.net/)>), serving the only function of editing the text/converse files in HE2!
+An editor powered by <a href="https://github.com/Ashrindy/AshDumpLib">AshDumpLib</a>, <a href="https://github.com/HexaEngine/Hexa.NET.ImGui">Hexa.NET.ImGui</a> (<a href="https://github.com/ocornut/imgui">imgui</a>) and <a href="https://opentk.net/">OpenTK</a>, serving the only function of editing the text/converse files in HE2!
 
 ## 🗃 Dependencies 🗃
 
-|                                                       Name                                                       |                          Use                           |
-| :--------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |
-|         [AshDumpLib](<[https://github.com/Ashrindy/AshDumpLib](https://github.com/Ashrindy/AshDumpLib)>)         |             Used for its I/O capabilities              |
-|                              [OpenTK](<[https://opentk.net/](https://opentk.net/)>)                              |       Used for OpenGL, GLFW, for easy windowing        |
-| [Hexa.NET.ImGui](<[https://github.com/HexaEngine/Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)>) | Used for imgui, the entire UI backbone of this project |
+|                                   Name                                    |                          Use                           |
+| :-----------------------------------------------------------------------: | :----------------------------------------------------: |
+|      <a href="https://github.com/Ashrindy/AshDumpLib">AshDumpLib</a>      |             Used for its I/O capabilities              |
+|                 <a href="https://opentk.net/">OpenTK</a>                  |       Used for OpenGL, GLFW, for easy windowing        |
+| <a href="https://github.com/HexaEngine/Hexa.NET.ImGui">Hexa.NET.ImGui</a> | Used for imgui, the entire UI backbone of this project |
 
 ## Credit
 
-- The people behind [PuyoTextEditor](<[https://github.com/nickworonekin/puyo-text-editor](https://github.com/nickworonekin/puyo-text-editor)>), made me wanna do this and also got the information about the text attributes from them!
-- [rsms, for the Inter font](<[https://github.com/rsms/inter](https://github.com/rsms/inter)>)!
+- The people behind <a href="https://github.com/nickworonekin/puyo-text-editor">PuyoTextEditor</a>, made me wanna do this and also got the information about the text attributes from them!
+- <a href="https://github.com/rsms/inter](https://github.com/rsms/inter">rsms, for the Inter font</a>!
