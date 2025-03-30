@@ -1,0 +1,3 @@
+[submodule "AshDumpLib"]
+	path = AshDumpLib
+	url = https://github.com/Ashrindy/AshDumpLib
