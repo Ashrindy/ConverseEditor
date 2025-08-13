@@ -1,31 +1,23 @@
 ﻿using Hexa.NET.ImGui;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConverseEditor.Panels;
 
 class FileHierarchy : Panel
 {
+    public FileHierarchy(Context ctx) : base(ctx) { }
+
     public override void RenderPanel()
     {
-        foreach(var x in ConverseEditorApp.LoadedFiles.ToList())
+        foreach(var x in ctx.LoadedFiles.ToList())
         {
             ImGui.PushID(x.GetHashCode());
-            if (ImGui.Selectable($"{ Path.GetFileNameWithoutExtension(x.FileName)} ({x.GetType().Name})", ConverseEditorApp.SelectedFile == x))
-                ConverseEditorApp.SelectedFile = x;
+            if (ImGui.Selectable($"{ Path.GetFileNameWithoutExtension(x.FileName)} - {x.GetType().Name}", ctx.SelectedFile == x)) ctx.SelectFile(x);
             if (ImGui.BeginPopupContextItem($"Options {x.FilePath}"))
             {
-                if (ImGui.MenuItem("Save"))
-                    x.SaveToFile(x.FilePath);
-                if (ImGui.MenuItem("Close"))
-                {
-                    if (ConverseEditorApp.SelectedFile == x)
-                        ConverseEditorApp.SelectedFile = new();
-                    ConverseEditorApp.LoadedFiles.Remove(x);
-                }
+                if (ImGui.MenuItem("Save")) x.SaveToFile(x.FilePath);
+
+                if (ImGui.MenuItem("Close")) ctx.Close(x);
+
                 ImGui.EndPopup();
             }
             ImGui.PopID();

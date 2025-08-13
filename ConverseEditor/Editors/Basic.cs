@@ -101,6 +101,6 @@ static class Basic
 
     public static bool Editor(string label, ref string value, ulong valueLength)
     {
-        return ImGui.InputText(label, ref value, valueLength);
+        return ImGui.InputText(label, ref value, (nuint)valueLength);
     }
 }

@@ -1,54 +1,125 @@
 ﻿using AshDumpLib.HedgehogEngine.BINA.Converse;
 using Hexa.NET.ImGui;
 using Hexa.NET.ImGui.Widgets.Dialogs;
-using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace ConverseEditor;
 
-static class MenuBar
+public class MenuBar
 {
-    public static OpenFileDialog ofd = new() { AllowMultipleSelection = true, OnlyAllowFilteredExtensions = true, AllowedExtensions = { Text.FileExtension, TextMeta.FileExtension, TextProject.FileExtension } };
+    Context ctx { get; }
+    public OpenFileDialog ofd = new() { AllowMultipleSelection = true, OnlyAllowFilteredExtensions = true, AllowedExtensions = { Text.FileExtension, TextMeta.FileExtension, TextProject.FileExtension } };
 
-    public static string CreateDefaultFilePath(string extension) => $"{Environment.CurrentDirectory}\\new_file{extension}";
-    public static string CreateDefaultFileName(string extension) => $"new_file{extension}";
+    void Open() => ofd.Show();
+    void Save() => ctx.SelectedFile.SaveToFile(ctx.SelectedFile.FilePath);
+    void SaveAll() => ctx.SaveAll();
+    void CloseAll() => ctx.CloseAll();
 
-    public static void Render()
+    bool CanSave() => ctx.SelectedFile != null;
+    bool CanSaveAll() => ctx.LoadedFiles.Count() > 0;
+    bool CanCloseAll() => ctx.LoadedFiles.Count() > 0;
+
+    public MenuBar(Context ctx) => this.ctx = ctx;
+
+    public void Render()
     {
+        if (Utilities.IsControlDown() && ImGui.IsKeyPressed(ImGuiKey.O)) Open();
+
+        if (Utilities.IsControlDown() && ImGui.IsKeyPressed(ImGuiKey.S) && CanSave()) Save();
+
         if (ImGui.BeginMainMenuBar())
         {
             if (ImGui.BeginMenu("File"))
             {
                 if (ImGui.BeginMenu("New"))
                 {
-                    if (ImGui.MenuItem("Text"))
-                        ConverseEditorApp.LoadedFiles.Add(new Text() { FilePath = CreateDefaultFilePath(Text.FileExtension), FileName = CreateDefaultFileName(Text.FileExtension), Extension = Text.FileExtension });
-                    if (ImGui.MenuItem("Text Meta"))
-                        ConverseEditorApp.LoadedFiles.Add(new TextMeta() { FilePath = CreateDefaultFilePath(TextMeta.FileExtension), FileName = CreateDefaultFileName(TextMeta.FileExtension), Extension = TextMeta.FileExtension });
-                    if (ImGui.MenuItem("Text Project"))
-                        ConverseEditorApp.LoadedFiles.Add(new TextProject() { FilePath = CreateDefaultFilePath(TextProject.FileExtension), FileName = CreateDefaultFileName(TextProject.FileExtension), Extension = TextProject.FileExtension });
+                    if (ImGui.MenuItem("Text")) ctx.LoadedFiles.Add(ctx.CreateFile<Text>());
+
+                    if (ImGui.MenuItem("Text Meta")) ctx.LoadedFiles.Add(ctx.CreateFile<TextMeta>());
+
+                    if (ImGui.MenuItem("Text Project")) ctx.LoadedFiles.Add(ctx.CreateFile<TextProject>());
+
                     ImGui.EndMenu();
                 }
-                if (ImGui.MenuItem("Open"))
-                    ofd.Show();
-                if (ImGui.MenuItem("Save All"))
-                    foreach (var i in ConverseEditorApp.LoadedFiles)
-                        i.SaveToFile(i.FilePath);
-                if (ImGui.MenuItem("Close All"))
-                {
-                    ConverseEditorApp.SelectedFile = new();
-                    ConverseEditorApp.LoadedFiles.Clear();
-                }
+
+                if (ImGui.MenuItem("Open", "Ctrl+O", false)) Open();
+
+                if (ImGui.MenuItem("Save All", "", false, CanSaveAll())) SaveAll(); 
+
+                if (ImGui.MenuItem("Close All", "", false, CanCloseAll())) CloseAll();
+
                 ImGui.EndMenu();
             }
+
+            if (ImGui.BeginMenu("Options"))
+            {
+                var settingsMgr = SettingsManager.Instance;
+                ref var settings = ref settingsMgr.settings;
+
+                if (ImGui.BeginMenu("Theme", Directory.Exists("themes")))
+                {
+                    string pureName = settings.SelectedTheme;
+                    if (ImGui.BeginCombo("###theme", pureName))
+                    {
+                        foreach (var item in ThemesManager.Instance.Themes)
+                        {
+                            bool selected = (pureName == item.Key);
+                            if (ImGui.Selectable(item.Key, selected))
+                            {
+                                settings.SelectedTheme = item.Key;
+                                settingsMgr.Save();
+                                ThemesManager.Instance.SetTheme(item.Key);
+                            }
+
+                            var rootElement = item.Value.RootElement;
+                            JsonElement metadata;
+                            bool hasMetadata = rootElement.TryGetProperty("Metadata", out metadata);
+
+                            if (hasMetadata && ImGui.BeginItemTooltip())
+                            {
+                                foreach (var i in metadata.EnumerateObject())
+                                    ImGui.Text($"{i.Name}: {i.Value}");
+                                ImGui.EndTooltip();
+                            }
+
+                            if (selected)
+                                ImGui.SetItemDefaultFocus();
+                        }
+
+                        ImGui.EndCombo();
+                    }
+
+                    ImGui.EndMenu();
+                }
+
+                ImGui.EndMenu();
+            }
+
+            if (ImGui.BeginMenu("View"))
+            {
+                foreach (var i in ctx.panels)
+                    ImGui.MenuItem(i.GetProperties().Name, "", ref i.Visible);
+
+                ImGui.EndMenu();
+            }
+
+            string versionText = $"v{ConverseEditorApp.Version}";
+            float right_text_width = ImGui.CalcTextSize(versionText).X;
+            float menu_bar_width = ImGui.GetContentRegionAvail().X;
+            float padding = 10;
+
+            ImGui.SameLine(ImGui.GetWindowPos().X + ImGui.GetWindowSize().X - right_text_width - ImGui.GetStyle().ItemSpacing.X - padding);
+            ImGui.Text(versionText);
+
             ImGui.EndMainMenuBar();
         }
 
         ofd.Draw(0);
 
-        if(ofd.Result == DialogResult.Yes && ofd.SelectedFile != null)
+        if (ofd.Result == DialogResult.Yes && ofd.SelectedFile != null)
         {
             foreach (var file in ofd.Selection)
-                ConverseEditorApp.LoadFile(file);
+                ctx.LoadFile(file);
             ofd.Reset();
             ofd.Close();
         }

@@ -11,7 +11,7 @@ static class TextProjectEditors
         bool changed = false;
         changed |= Basic.Editor("ID Name", ref value.IDName, 128);
         changed |= Basic.Editor("Font Name", ref value.FontName, 128);
-        changed |= Basic.Editor("Unk0", ref value.Unk0);
+        changed |= Basic.Editor("Default Size", ref value.DefaultSize);
         changed |= Basic.Editor("Unk1", ref value.Unk1);
         changed |= Basic.Editor("Unk2", ref value.Unk2);
         changed |= Basic.Editor("Unk3", ref value.Unk3);
@@ -118,7 +118,7 @@ static class TextProjectEditors
             if (ImGui.Selectable("Delete"))
                 values.Remove(value);
             if (changed |= ImGui.Selectable("Add"))
-                value.Values.Add(new() { Data = new() { IDName = "New Font", FontName = "new-font", Unk0 = 0, Unk1 = 0, Unk2 = 0, Unk3 = 0, Unk4 = 0, Unk5 = 0, Unk6 = 0, Unk7 = 0, Unk8 = 0, Unk9 = 0, Unk10 = 0, Unk11 = 0 } });
+                value.Values.Add(new() { Data = new() { IDName = "New Font", FontName = "new-font", DefaultSize = 0, Unk1 = 0, Unk2 = 0, Unk3 = 0, Unk4 = 0, Unk5 = 0, Unk6 = 0, Unk7 = 0, Unk8 = 0, Unk9 = 0, Unk10 = 0, Unk11 = 0 } });
             ImGui.EndPopup();
         }
         if (open)
@@ -144,7 +144,7 @@ static class TextProjectEditors
         if (ImGui.BeginPopupContextItem($"Options_{value}"))
         {
             if (changed |= ImGui.Selectable("Add"))
-                value.Values.Add(new() { Data = new() { IDName = "New Font", FontName = "new-font", Unk0 = 0, Unk1 = 0, Unk2 = 0, Unk3 = 0, Unk4 = 0, Unk5 = 0, Unk6 = 0, Unk7 = 0, Unk8 = 0, Unk9 = 0, Unk10 = 0, Unk11 = 0 } });
+                value.Values.Add(new() { Data = new() { IDName = "New Font", FontName = "new-font", DefaultSize = 0, Unk1 = 0, Unk2 = 0, Unk3 = 0, Unk4 = 0, Unk5 = 0, Unk6 = 0, Unk7 = 0, Unk8 = 0, Unk9 = 0, Unk10 = 0, Unk11 = 0 } });
             ImGui.EndPopup();
         }
         if (open)

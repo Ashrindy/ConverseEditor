@@ -1,32 +1,28 @@
 ﻿using AshDumpLib.HedgehogEngine.BINA.Converse;
 using ConverseEditor.Editors;
-using Hexa.NET.ImGui;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConverseEditor.Panels;
 
 class FileEditor : Panel
 {
+    public FileEditor(Context ctx) : base(ctx) { }
+
     public override void RenderPanel()
     {
-        if (ConverseEditorApp.SelectedFile.GetType() == typeof(Text))
+        var selectedFile = ctx.SelectedFile;
+        if (selectedFile.GetType() == typeof(Text))
         {
-            Text value = (Text)ConverseEditorApp.SelectedFile;
+            Text value = (Text)selectedFile;
             TextEditors.Editor(ref value);
         }
-        else if(ConverseEditorApp.SelectedFile.GetType() == typeof(TextMeta))
+        else if(selectedFile.GetType() == typeof(TextMeta))
         {
-            TextMeta value = (TextMeta)ConverseEditorApp.SelectedFile;
+            TextMeta value = (TextMeta)selectedFile;
             TextMetaEditors.Editor(ref value);
         }
-        else if (ConverseEditorApp.SelectedFile.GetType() == typeof(TextProject))
+        else if (selectedFile.GetType() == typeof(TextProject))
         {
-            TextProject value = (TextProject)ConverseEditorApp.SelectedFile;
+            TextProject value = (TextProject)selectedFile;
             TextProjectEditors.Editor(ref value);
         }
     }

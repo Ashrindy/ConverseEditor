@@ -1,8 +1,4 @@
-﻿using AshDumpLib.HedgehogEngine.BINA.Converse;
-using AshDumpLib.Helpers.Archives;
-using ConverseEditor;
-using ConverseEditor.Panels;
-using Hexa.NET.ImGui;
+﻿using Hexa.NET.ImGui;
 using Hexa.NET.ImGui.Backends.GLFW;
 using Hexa.NET.ImGui.Backends.OpenGL3;
 using Hexa.NET.ImGui.Utilities;
@@ -10,26 +6,22 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using System.Diagnostics;
-using System.Numerics;
 
 class ConverseEditorApp : GameWindow
 {
+    public static string Version = "0.0.3";
+    public static string TitleName = "Converse Editor";
+    static ConverseEditorApp instance;
+    public static ConverseEditorApp Instance { get { return instance; } }
+
     ImGuiContextPtr imGuiCtx = ImGui.CreateContext();
     Stopwatch stopWatch = new();
     float fpsLimit = 60;
-    public List<Panel> panels = new();
-
-    public static List<IFile> LoadedFiles = new();
-    public static IFile SelectedFile = new();
-
-    public void AddPanel<T>() where T : Panel, new() => panels.Add(new T());
 
     public ConverseEditorApp(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
     {
         InitImGUI();
         stopWatch.Start();
-        AddPanel<FileHierarchy>();
-        AddPanel<FileEditor>();
     }
 
     void InitImGUI()
@@ -40,22 +32,7 @@ class ConverseEditorApp : GameWindow
         io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
         io.DisplaySize = new(ClientSize.X, ClientSize.Y);
 
-        var style = ImGui.GetStyle();
-        style.FrameRounding = 4;
-        style.WindowBorderSize = 1;
-        style.FrameBorderSize = 0;
-        style.PopupBorderSize = 1;
-        style.WindowRounding = 4;
-        style.ChildRounding = 4;
-        style.FrameRounding = 4;
-        style.PopupRounding = 4;
-        style.ScrollbarRounding = 12;
-        style.CellPadding.X = 4;
-        style.CellPadding.Y = 2;
-        style.WindowTitleAlign.X = 0.50f;
-        style.SelectableTextAlign.X = 0.03f;
-        style.WindowMenuButtonPosition = ImGuiDir.Right;
-        style.Colors[(int)ImGuiCol.WindowBg] = new(0, 0, 0, 1);
+        ImGui.StyleColorsDark();
 
         InitImGUIFont();
         InitImGUIGLFW();
@@ -87,10 +64,7 @@ class ConverseEditorApp : GameWindow
         ImGuiImplGLFW.InitForOpenGL(windowPtr, true);
     }
 
-    protected override void OnLoad()
-    {
-        base.OnLoad();
-    }
+    protected override void OnLoad() => base.OnLoad();
 
     void FrameLimit()
     {
@@ -107,6 +81,8 @@ class ConverseEditorApp : GameWindow
     void ImGuiBegin()
     {
         ImGui.SetCurrentContext(imGuiCtx);
+        var color = ImGui.GetStyle().Colors[(int)ImGuiCol.WindowBg];
+        GL.ClearColor(color.X, color.Y, color.Z, color.W);
         GL.Clear(ClearBufferMask.ColorBufferBit);
         ImGui.SetNextFrameWantCaptureKeyboard(true);
         ImGui.SetNextFrameWantCaptureMouse(true);
@@ -130,28 +106,6 @@ class ConverseEditorApp : GameWindow
         SwapBuffers();
     }
 
-    void RenderDockSpace()
-    {
-        ImGuiViewportPtr viewport = ImGui.GetMainViewport();
-        ImGui.SetNextWindowPos(viewport.Pos);
-        ImGui.SetNextWindowSize(viewport.Size);
-        ImGui.SetNextWindowViewport(viewport.ID);
-
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoTitleBar |
-                                    ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize |
-                                    ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoBringToFrontOnFocus |
-                                    ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.NoBackground;
-
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
-        ImGui.Begin("DockSpace Window", windowFlags);
-        ImGui.PopStyleVar(2);
-
-        ImGui.SetCursorPosY(ImGui.GetFrameHeight());
-
-        ImGui.DockSpace(ImGui.GetID("DockSpace"), new Vector2(0, 0), ImGuiDockNodeFlags.PassthruCentralNode);
-    }
-
     protected override void OnRenderFrame(FrameEventArgs args)
     {
         base.OnRenderFrame(args);
@@ -159,12 +113,7 @@ class ConverseEditorApp : GameWindow
         FrameLimit();
         ImGuiBegin();
 
-        MenuBar.Render();
-
-        RenderDockSpace();
-
-        foreach (var x in panels)
-            x.Render();
+        ConverseEditor.Context.Instance.Render();
 
         ImGui.End();
 
@@ -177,28 +126,9 @@ class ConverseEditorApp : GameWindow
         ImGui.GetIO().DisplaySize = new(e.Width, e.Height);
     }
 
-    protected override void OnUnload()
-    {
-        base.OnUnload();
-    }
+    protected override void OnUnload() => base.OnUnload(); 
 
-    public static void LoadFile(string file)
-    {
-        switch (Path.GetExtension(file))
-        {
-            case Text.FileExtension:
-                LoadedFiles.Add(new Text(file));
-                break;
-
-            case TextMeta.FileExtension:
-                LoadedFiles.Add(new TextMeta(file));
-                break;
-
-            case TextProject.FileExtension:
-                LoadedFiles.Add(new TextProject(file));
-                break;
-        }
-    }
+    public void SetTitleBarName(string name) => Title = name;
 
     static void Main(string[] args)
     {
@@ -207,12 +137,12 @@ class ConverseEditorApp : GameWindow
         var nativeSettings = new NativeWindowSettings
         {
             ClientSize = new(800, 600),
-            Title = "Converse Editor",
+            Title = TitleName,
         };
 
-        using var window = new ConverseEditorApp(gameSettings, nativeSettings);
+        instance = new ConverseEditorApp(gameSettings, nativeSettings);
         foreach (var i in args)
-            LoadFile(i);
-        window.Run();
+            ConverseEditor.Context.Instance.LoadFile(i);
+        instance.Run();
     }
 }

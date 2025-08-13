@@ -1,9 +1,10 @@
-﻿using Hexa.NET.ImGui;
+﻿using ConverseEditor;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace ConverseEditor;
 
-partial class Panel
+public class Panel
 {
     public struct Properties
     {
@@ -29,11 +30,17 @@ partial class Panel
         }
     }
 
-    public Panel() { }
+    protected Context ctx { get; }
+    public bool Visible = true;
 
-    public virtual Properties GetProperties() { return new Properties{ }; }
+    public Panel(Context ctx) => this.ctx = ctx;
+
+    public virtual Properties GetProperties() { return new Properties { }; }
     public virtual void RenderPanel() { }
-    public void Render() {
+    public void Render()
+    {
+        if (!Visible) return;
+
         Properties traits = GetProperties();
 
         ImGui.SetNextWindowPos(traits.Position, ImGuiCond.FirstUseEver, traits.Pivot);

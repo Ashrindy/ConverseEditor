@@ -8,11 +8,7 @@ static class TextMetaEditors
     public static bool Editor(string label, ref TextMeta.IconData.Icon value, ref List<TextMeta.IconData.Icon> values)
     {
         bool changed = false;
-        unsafe
-        {
-            fixed (float* x = &value.Unk0)
-                ImGui.PushID(x);
-        }
+        ImGui.PushID($"icon{values.IndexOf(value)}");
         bool open = ImGui.TreeNode(label + "###");
         if (ImGui.BeginPopupContextItem($"Options_{value}"))
         {
@@ -114,11 +110,7 @@ static class TextMetaEditors
     public static bool Editor(string label, ref TextMeta.TypeFace value, ref List<TextMeta.TypeFace> values)
     {
         bool changed = false;
-        unsafe
-        {
-            fixed (float* x = &value.Unk0)
-                ImGui.PushID(x);
-        }
+        ImGui.PushID($"typeface{values.IndexOf(value)}");
         bool mopen = ImGui.TreeNode(label + "###");
         if (ImGui.BeginPopupContextItem($"Options_{value}"))
         {
