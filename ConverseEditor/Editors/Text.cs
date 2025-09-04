@@ -163,7 +163,7 @@ static class TextEditors
 
                             bool isSheetOpen = ImGui.TreeNode(sheet.Name);
 
-                            if (ImGui.BeginPopupContextItem($"Options {sheet}"))
+                            if (value.Sheets.Count > 1 && ImGui.BeginPopupContextItem($"Options {sheet}"))
                             {
                                 if (ImGui.Selectable("Delete"))
                                     value.Sheets.Remove(sheet);
