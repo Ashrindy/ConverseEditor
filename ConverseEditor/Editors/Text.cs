@@ -1,7 +1,9 @@
 ﻿using AshDumpLib.HedgehogEngine.BINA.Converse;
 using Hexa.NET.ImGui;
+using Newtonsoft.Json.Linq;
 using System.Numerics;
 using System.Threading.Channels;
+using static AshDumpLib.HedgehogEngine.BINA.Converse.Text;
 
 namespace ConverseEditor.Editors;
 
@@ -113,24 +115,121 @@ static class TextEditors
     public static bool Editor(ref Text value)
     {
         bool changed = false;
-        changed |= Basic.Editor("Sheet Name", ref value.SheetName, 32);
-        bool open = ImGui.TreeNode("Entries");
-        if(ImGui.BeginPopupContextItem("Options Entries"))
+
+        string[] names = { "Forces", "Frontiers, SXSG" };
+        int versionValue = value.Version == TextVersion.Frontiers ? 1 : 0;
+        if (ImGui.BeginCombo("Version", names[versionValue]))
         {
-            if (ImGui.Selectable("Add"))
-                value.Entries.Add(new());
-            ImGui.EndPopup();
-        }
-        if (open)
-        {
-            for (int i = 0; i < value.Entries.Count; i++)
+            for(int i = 0; i < names.Length; i++)
             {
-                var x = value.Entries[i];
-                if (changed |= Editor(ref x, ref value.Entries))
-                    value.Entries[i] = x;
+                var name = names[i];
+                bool isSelected = i == versionValue;
+                if (ImGui.Selectable(name, isSelected))
+                {
+                    versionValue = i;
+                    changed = true;
+                }
+
+                if (isSelected)
+                    ImGui.SetItemDefaultFocus();
             }
-            ImGui.TreePop();
+
+            ImGui.EndCombo();
         }
+        if (changed)
+            value.Version = versionValue == 1 ? TextVersion.Frontiers : TextVersion.Forces;
+
+        ImGui.Separator();
+
+        switch (value.Version)
+        {
+            case TextVersion.Forces:
+                {
+                    bool isOpen = ImGui.TreeNode("Sheets");
+
+                    if (ImGui.BeginPopupContextItem($"Sheet Options"))
+                    {
+                        if (ImGui.Selectable("Add"))
+                            value.Sheets.Add(new() { Name = "New Sheet" });
+                        ImGui.EndPopup();
+                    }
+
+                    if (isOpen)
+                    {
+                        for (int l = 0; l < value.Sheets.Count; l++)
+                        {
+                            var sheet = value.Sheets[l];
+                            ImGui.PushID(sheet.GetHashCode());
+
+                            bool isSheetOpen = ImGui.TreeNode(sheet.Name);
+
+                            if (ImGui.BeginPopupContextItem($"Options {sheet}"))
+                            {
+                                if (ImGui.Selectable("Delete"))
+                                    value.Sheets.Remove(sheet);
+                                ImGui.EndPopup();
+                            }
+
+                            if (isSheetOpen)
+                            {
+                                changed |= Basic.Editor("Sheet Name", ref sheet.Name, 32);
+                                bool open = ImGui.TreeNode("Entries");
+                                if (ImGui.BeginPopupContextItem("Options Entries"))
+                                {
+                                    if (ImGui.Selectable("Add"))
+                                        sheet.Entries.Add(new());
+                                    ImGui.EndPopup();
+                                }
+                                if (open)
+                                {
+                                    for (int i = 0; i < sheet.Entries.Count; i++)
+                                    {
+                                        var x = sheet.Entries[i];
+                                        if (changed |= Editor(ref x, ref sheet.Entries))
+                                            sheet.Entries[i] = x;
+                                    }
+                                    ImGui.TreePop();
+                                }
+                                ImGui.TreePop();
+                            }
+
+                            ImGui.PopID();
+
+                            if (changed)
+                                value.Sheets[l] = sheet;
+                        }
+
+                        ImGui.TreePop();
+                    }
+                }
+                break;
+
+            case TextVersion.Frontiers or TextVersion.SXSG:
+                {
+                    var sheet = value.Sheets[0];
+                    changed |= Basic.Editor("Sheet Name", ref sheet.Name, 32);
+                    bool open = ImGui.TreeNode("Entries");
+                    if (ImGui.BeginPopupContextItem("Options Entries"))
+                    {
+                        if (ImGui.Selectable("Add"))
+                            sheet.Entries.Add(new());
+                        ImGui.EndPopup();
+                    }
+                    if (open)
+                    {
+                        for (int i = 0; i < sheet.Entries.Count; i++)
+                        {
+                            var x = sheet.Entries[i];
+                            if (changed |= Editor(ref x, ref sheet.Entries))
+                                sheet.Entries[i] = x;
+                        }
+                        ImGui.TreePop();
+                    }
+                }
+                break;
+        }
+        
+        
         return changed;
     }
 
