@@ -1,8 +1,6 @@
 ﻿using AshDumpLib.HedgehogEngine.BINA.Converse;
 using Hexa.NET.ImGui;
-using Newtonsoft.Json.Linq;
 using System.Numerics;
-using System.Threading.Channels;
 using static AshDumpLib.HedgehogEngine.BINA.Converse.Text;
 
 namespace ConverseEditor.Editors;
@@ -63,7 +61,7 @@ static class TextEditors
 
         ImGui.PushID(value.GetHashCode());
 
-        bool isOpen = ImGui.TreeNode(value.Key);
+        bool isOpen = ImGui.TreeNode($"{value.Key}###{value.GetHashCode()}");
 
         if (ImGui.BeginPopupContextItem($"Options {value}"))
         {

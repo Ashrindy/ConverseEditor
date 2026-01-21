@@ -10,10 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hexa.NET.ImGui" Version="2.2.8.5" />
-    <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.4" />
-    <PackageReference Include="Hexa.NET.ImGui.Backends.GLFW" Version="1.0.17.4" />
-    <PackageReference Include="Hexa.NET.ImGui.Widgets" Version="1.2.14" />
+    <PackageReference Include="Hexa.NET.ImGui" Version="2.2.9" />
+    <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18" />
+    <PackageReference Include="Hexa.NET.ImGui.Backends.GLFW" Version="1.0.18" />
+    <PackageReference Include="Hexa.NET.ImGui.Widgets" Version="1.2.15" />
+    <PackageReference Include="NativeFileDialogNET" Version="2.0.2" />
     <PackageReference Include="OpenTK" Version="4.9.4" />
   </ItemGroup>
 

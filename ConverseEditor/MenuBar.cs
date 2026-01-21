@@ -2,15 +2,29 @@
 using Hexa.NET.ImGui;
 using Hexa.NET.ImGui.Widgets.Dialogs;
 using System.Text.Json;
+using NativeFileDialogNET;
 
 namespace ConverseEditor;
 
 public class MenuBar
 {
     Context ctx { get; }
-    public OpenFileDialog ofd = new() { AllowMultipleSelection = true, OnlyAllowFilteredExtensions = true, AllowedExtensions = { Text.FileExtension, TextMeta.FileExtension, TextProject.FileExtension } };
+    public NativeFileDialog ofd = new();
 
-    void Open() => ofd.Show();
+    void Open()
+    {
+        ofd.SelectFile();
+        ofd.AllowMultiple();
+        ofd.AddFilter("Text", "cnvrs-text");
+        ofd.AddFilter("Text Meta", "cnvrs-meta");
+        ofd.AddFilter("Text Project", "cnvrs-proj");
+        string[]? path = null;
+        var result = ofd.Open(out path);
+
+        if (result == NativeFileDialogNET.DialogResult.Okay)
+            foreach (var i in path)
+                ctx.LoadFile(i);
+    }
     void Save() => ctx.SelectedFile.SaveToFile(ctx.SelectedFile.FilePath);
     void SaveAll() => ctx.SaveAll();
     void CloseAll() => ctx.CloseAll();
@@ -112,16 +126,6 @@ public class MenuBar
             ImGui.Text(versionText);
 
             ImGui.EndMainMenuBar();
-        }
-
-        ofd.Draw(0);
-
-        if (ofd.Result == DialogResult.Yes && ofd.SelectedFile != null)
-        {
-            foreach (var file in ofd.Selection)
-                ctx.LoadFile(file);
-            ofd.Reset();
-            ofd.Close();
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 class ConverseEditorApp : GameWindow
 {
-    public static string Version = "0.0.5";
+    public static string Version = "0.0.7";
     public static string TitleName = "Converse Editor";
     static ConverseEditorApp instance;
     public static ConverseEditorApp Instance { get { return instance; } }
@@ -22,6 +22,13 @@ class ConverseEditorApp : GameWindow
     {
         InitImGUI();
         stopWatch.Start();
+        FileDrop += OnFileDrop;
+    }
+
+    void OnFileDrop(FileDropEventArgs e)
+    {
+        foreach (var i in e.FileNames)
+            ConverseEditor.Context.Instance.LoadFile(i);
     }
 
     void InitImGUI()
