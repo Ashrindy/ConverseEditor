@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 class ConverseEditorApp : GameWindow
 {
-    public static string Version = "0.0.7";
+    public static string Version = "0.0.8";
     public static string TitleName = "Converse Editor";
     static ConverseEditorApp instance;
     public static ConverseEditorApp Instance { get { return instance; } }
