@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 class ConverseEditorApp : GameWindow
 {
-    public static string Version = "0.0.8";
+    public static string Version = "0.0.9";
     public static string TitleName = "Converse Editor";
     static ConverseEditorApp instance;
     public static ConverseEditorApp Instance { get { return instance; } }
@@ -50,7 +50,11 @@ class ConverseEditorApp : GameWindow
     {
         ImGuiFontBuilder builder = new();
         builder
-            .AddFontFromFileTTF("res/fonts/Inter.ttf", 14, [0x1, 0xFFFFF])
+            .AddFontFromFileTTF("res/fonts/Inter.ttf", 14);
+        builder
+            .Config.RasterizerMultiply = 5f;
+        builder
+            .AddFontFromFileTTF("res/fonts/NotoSansJP-VariableFont_wght.ttf", 20, [0x0020, 0x00FF, 0x3000, 0x30FF, 0x31F0, 0x31FF, 0xFF00, 0xFFEF, 0x4E00, 0x9FAF])
             .Build();
     }
 

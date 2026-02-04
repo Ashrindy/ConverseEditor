@@ -20,9 +20,9 @@ static class TextEditors
         }
         if (open)
         {
-            changed |= Basic.Editor("Type", ref value.Type, 128);
-            changed |= Basic.Editor("Unk", ref value.Unk);
-            changed |= Basic.Editor("Name", ref value.Name, 128);
+            changed |= Basic.Editor("Name", ref value.Type, 128);
+            changed |= Basic.Editor("Type", ref value.Unk);
+            changed |= Basic.Editor("Value", ref value.Name, 128);
             ImGui.TreePop();
         }
         ImGui.PopID();
@@ -33,10 +33,10 @@ static class TextEditors
     {
         bool changed = false;
         bool open = ImGui.TreeNode(label);
-        if(ImGui.BeginPopupContextItem("Options Character"))
+        if(ImGui.BeginPopupContextItem("Options Attribute"))
         {
             if (ImGui.Selectable("Add"))
-                value.Add(new() { Name = "New Character", Type = "Speaker", Unk = 0});
+                value.Add(new() { Name = "New Attribute", Type = "Speaker", Unk = 0});
             ImGui.EndPopup();
         }
         if (open)
@@ -89,7 +89,7 @@ static class TextEditors
             if (changed |= ImGui.InputTextMultiline("##text", ref decodedText, int.MaxValue / 4, new Vector2(0, rowHeight)))
                 value.Text = TextCompute.EncodeString(decodedText);
 
-            Editor("Characters", ref value.Characters);
+            Editor("Attributes", ref value.Characters);
 
             if (ImGui.TreeNode("Font"))
             {
@@ -176,6 +176,10 @@ static class TextEditors
                                 {
                                     if (ImGui.Selectable("Add"))
                                         sheet.Entries.Add(new());
+
+                                    if (ImGui.Selectable("Sort Alphabetically"))
+                                        sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));
+
                                     ImGui.EndPopup();
                                 }
                                 if (open)
@@ -211,6 +215,10 @@ static class TextEditors
                     {
                         if (ImGui.Selectable("Add"))
                             sheet.Entries.Add(new());
+
+                        if (ImGui.Selectable("Sort Alphabetically"))
+                            sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));
+
                         ImGui.EndPopup();
                     }
                     if (open)

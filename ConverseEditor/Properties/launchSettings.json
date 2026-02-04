@@ -1,0 +1,8 @@
+{
+    "profiles": {
+        "ConverseEditor": {
+            "commandName": "Project",
+            "nativeDebugging": true
+        }
+    }
+}
