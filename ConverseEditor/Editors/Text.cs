@@ -177,8 +177,9 @@ static class TextEditors
                                     if (ImGui.Selectable("Add"))
                                         sheet.Entries.Add(new());
 
-                                    if (ImGui.Selectable("Sort Alphabetically"))
-                                        sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));
+                                    // TODO: Fix, as it apparently breaks the entries as of now
+                                    /*if (ImGui.Selectable("Sort Alphabetically"))
+                                        sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));*/
 
                                     ImGui.EndPopup();
                                 }
@@ -209,6 +210,7 @@ static class TextEditors
             case TextVersion.Frontiers or TextVersion.SXSG:
                 {
                     var sheet = value.Sheets[0];
+                    // TODO: Add an option to change the actual language, the problem there is right now, is that you can't detect whether it's a Frontiers or Miller cnvrs-text
                     changed |= Basic.Editor("Sheet Name", ref sheet.Name, 32);
                     bool open = ImGui.TreeNode("Entries");
                     if (ImGui.BeginPopupContextItem("Options Entries"))
@@ -216,8 +218,9 @@ static class TextEditors
                         if (ImGui.Selectable("Add"))
                             sheet.Entries.Add(new());
 
-                        if (ImGui.Selectable("Sort Alphabetically"))
-                            sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));
+                        // TODO: Fix, as it apparently breaks the entries as of now
+                        /*if (ImGui.Selectable("Sort Alphabetically"))
+                            sheet.Entries.Sort((a, b) => string.Compare(a.Key, b.Key, StringComparison.Ordinal));*/
 
                         ImGui.EndPopup();
                     }
