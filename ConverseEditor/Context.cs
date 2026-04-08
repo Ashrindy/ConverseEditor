@@ -16,6 +16,7 @@ public sealed class Context
 
     public List<IFile> LoadedFiles = new();
     public IFile SelectedFile = new();
+    public string SearchValue = "";
 
     public void AddPanel<T>() where T : Panel
     {

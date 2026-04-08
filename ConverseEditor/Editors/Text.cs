@@ -185,9 +185,21 @@ static class TextEditors
                                 }
                                 if (open)
                                 {
+                                    string search = Context.Instance.SearchValue;
+                                    if (Basic.Editor("Search", ref search, 800)) Context.Instance.SearchValue = search;
+
+                                    List<Entry> searchResults = new();
+                                    if (search != "")
+                                    {
+                                        string searchLow = search.ToLower();
+                                        searchResults = sheet.Entries.FindAll(x => x.Key.ToLower().Contains(searchLow) || x.Text.ToLower().Contains(searchLow));
+                                    }
+
                                     for (int i = 0; i < sheet.Entries.Count; i++)
                                     {
                                         var x = sheet.Entries[i];
+                                        if (search != "" && !searchResults.Contains(x)) continue;
+
                                         if (changed |= Editor(ref x, ref sheet.Entries))
                                             sheet.Entries[i] = x;
                                     }
@@ -226,9 +238,21 @@ static class TextEditors
                     }
                     if (open)
                     {
+                        string search = Context.Instance.SearchValue;
+                        if (Basic.Editor("Search", ref search, 800)) Context.Instance.SearchValue = search;
+
+                        List<Entry> searchResults = new();
+                        if (search != "")
+                        {
+                            string searchLow = search.ToLower();
+                            searchResults = sheet.Entries.FindAll(x => x.Key.ToLower().Contains(searchLow) || x.Text.ToLower().Contains(searchLow));
+                        }
+
                         for (int i = 0; i < sheet.Entries.Count; i++)
                         {
                             var x = sheet.Entries[i];
+                            if (search != "" && !searchResults.Contains(x)) continue;
+
                             if (changed |= Editor(ref x, ref sheet.Entries))
                                 sheet.Entries[i] = x;
                         }
