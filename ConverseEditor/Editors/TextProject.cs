@@ -22,7 +22,7 @@ static class TextProjectEditors
         changed |= Basic.Editor("Unk8", ref value.Unk8);
         changed |= Basic.Editor("Unk9", ref value.Unk9);
         changed |= Basic.Editor("Unk10", ref value.Unk10);
-        changed |= Basic.Editor("Unk11", ref value.Unk11);
+        changed |= Basic.Editor("Deco Tech Param Index", ref value.Unk11);
         return changed;
     }
 

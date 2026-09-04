@@ -68,24 +68,55 @@ static class Basic
     public static bool Editor(string label, ref int? value)
     {
         bool changed = false;
-        if (value.HasValue)
-        {
-            int x = value.Value;
-            changed |= ImGui.DragInt(label, ref x);
-            value = x;
-        }
+        ImGui.PushID(label);
+
+        bool hasValue = value.HasValue;
+        if (changed |= ImGui.Checkbox("", ref hasValue))
+            value = hasValue ? 0 : null;
+
+        ImGui.SameLine();
+
+        int x = 0;
+        if (value.HasValue) x = value.Value;
+        else ImGui.BeginDisabled();
+
+        if (changed |= ImGui.DragInt(label, ref x))
+            if (value.HasValue)
+                value = x;
+
+        if (!value.HasValue)
+            ImGui.EndDisabled();
+
+        ImGui.PopID();
+
         return changed;
     }
 
     public static bool Editor(string label, ref float? value)
     {
         bool changed = false;
-        if (value.HasValue)
-        {
-            float x = value.Value;
-            changed |= ImGui.DragFloat(label, ref x);
-            value = x;
-        }
+
+        ImGui.PushID(label);
+
+        bool hasValue = value.HasValue;
+        if (changed |= ImGui.Checkbox("", ref hasValue))
+             value = hasValue ? 0 : null;
+
+        ImGui.SameLine();
+
+        float x = 0;
+        if (value.HasValue) x = value.Value;
+        else ImGui.BeginDisabled();
+
+        if (changed |= ImGui.DragFloat(label, ref x))
+            if (value.HasValue)
+                value = x;
+
+        if (!value.HasValue)
+            ImGui.EndDisabled();
+
+        ImGui.PopID();
+
         return changed;
     }
 
